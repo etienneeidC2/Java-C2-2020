@@ -12,8 +12,8 @@ public class UserDto implements Serializable{
 	private String email;
 	private String token;
 	
-	public long getId() {
-		return id;
+	public String getId() {
+		return  Long.toString(id);
 	}
 	public void setId(long id) {
 		this.id = id;

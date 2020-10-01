@@ -6,9 +6,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apidoc.ws.UserRepository;
 import com.apidoc.ws.io.entity.UserEntity;
-import com.apidoc.ws.security.SecurityConstraints;
+import com.apidoc.ws.io.repositories.UserRepository;
+import com.apidoc.ws.security.SecurityConstants;
 import com.apidoc.ws.service.UserService;
 import com.apidoc.ws.shared.dto.UserDto;
 import com.apidoc.ws.shared.dto.Utils;
@@ -48,9 +48,9 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		String token = Jwts.builder()
-				.setSubject(returnValue.getUserId())
-				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstraints.EXPIRATION_DATE))
-				.signWith(SignatureAlgorithm.HS512, SecurityConstraints.TOKEN_SECRET)
+				.setSubject(returnValue.getId())
+				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_DATE))
+				.signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET)
 				.compact();
 		
 		returnValue.setToken(token);

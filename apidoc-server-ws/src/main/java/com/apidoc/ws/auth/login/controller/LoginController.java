@@ -1,41 +1,34 @@
-package com.apidoc.ws.auth.register.controller;
+package com.apidoc.ws.auth.login.controller;
 
 import java.net.http.*;
 import java.io.IOException;
 import java.net.URI;
 import java.time.Duration;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apidoc.ws.auth.model.request.GoogleTokenModel;
+import com.apidoc.ws.auth.model.response.ApiRest;
 import com.apidoc.ws.auth.model.response.UserRest;
 import com.apidoc.ws.service.UserService;
 import com.apidoc.ws.shared.dto.UserDto;
 
 
 @RestController
-@RequestMapping("user")
-public class RegisterController {
+@RequestMapping("login")
+public class LoginController {
 
 	@Autowired
 	UserService userService;
 	
-	@GetMapping
-	public String getUser() {
-		return "Get user was called";
-	}
-	
 	@PostMapping
-	public UserRest createUser(@RequestBody GoogleTokenModel token) throws IOException, InterruptedException {
+	public ApiRest createUser(@RequestBody GoogleTokenModel token) throws IOException, InterruptedException {
 		
 		String t = token.getToken();
 		
@@ -43,16 +36,31 @@ public class RegisterController {
 		
 		HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("https://oauth2.googleapis.com/tokeninfo?id_token=" + t)).build();
 		
-		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+		ApiRest returnValue = new ApiRest();
 		
-//		System.out.println(response.body());
+		JSONObject resBody = new JSONObject();
 		
-		JSONObject resBody = new JSONObject(response.body());
+		try {
+			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+			
+			resBody = new JSONObject(response.body());
+			
+			if(response.statusCode() != 200) {				
+				throw new Exception(resBody.getString("error"));
+			}
+			
+		} catch (Exception exp) {
+			returnValue.setStatus("error");
+			returnValue.setData("Invalid Google token");
+			
+			return returnValue;
+		}
+		
 //		System.out.println(resBody.getString("given_name"));
 //		System.out.println(resBody.getString("family_name"));
 //		System.out.println(resBody.getString("email"));
 
-		UserRest returnValue = new UserRest();
+		
 		UserDto userDto = new UserDto();
 		
 		userDto.setFirstName(resBody.getString("given_name"));
@@ -60,14 +68,13 @@ public class RegisterController {
 		userDto.setEmail(resBody.getString("email"));
 		
 		UserDto createdUser = userService.createUser(userDto);
-		BeanUtils.copyProperties(createdUser, returnValue);
+		UserRest userRest = new UserRest();
+		BeanUtils.copyProperties(createdUser, userRest);
+		
+		returnValue.setStatus("success");
+		returnValue.setData(userRest);
 		
 		return returnValue;
-	}
-	
-	@PutMapping
-	public String updateUser() {
-		return "Update USer was called";
 	}
 }
 
