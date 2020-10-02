@@ -1,0 +1,61 @@
+package com.apidoc.auth.ws.service.impl;
+
+import java.util.Date;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.apidoc.auth.ws.io.entity.UserEntity;
+import com.apidoc.auth.ws.io.repositories.UserRepository;
+import com.apidoc.auth.ws.security.SecurityConstants;
+import com.apidoc.auth.ws.service.UserService;
+import com.apidoc.auth.ws.shared.dto.UserDto;
+import com.apidoc.auth.ws.shared.dto.Utils;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+@Service
+public class UserServiceImpl implements UserService {
+	
+	@Autowired
+	UserRepository userRepository;
+	
+	@Autowired
+	Utils utils;
+
+	@Override
+	public UserDto createUser(UserDto user) {
+		
+		UserDto returnValue = new UserDto();
+		
+		UserEntity oldUserDetails = userRepository.findByEmail(user.getEmail());
+		
+		if( oldUserDetails != null) {
+			BeanUtils.copyProperties(oldUserDetails, returnValue);
+			
+		} else {
+			UserEntity userEntity = new UserEntity();
+			BeanUtils.copyProperties(user, userEntity);
+			
+			String publicUserId = utils.generateUserId(30);
+			userEntity.setUserId(publicUserId);
+			
+			UserEntity storedUSerDetails = userRepository.save(userEntity);
+			
+			BeanUtils.copyProperties(storedUSerDetails, returnValue);
+		}
+		
+		String token = Jwts.builder()
+				.setSubject(returnValue.getId())
+				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_DATE))
+				.signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET)
+				.compact();
+		
+		returnValue.setToken(token);
+		
+		return returnValue;
+	}
+
+}

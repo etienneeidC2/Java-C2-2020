@@ -1,4 +1,4 @@
-package com.apidoc.ws.auth.login.controller;
+package com.apidoc.auth.ws.ui.login.controller;
 
 import java.net.http.*;
 import java.io.IOException;
@@ -8,16 +8,18 @@ import org.json.JSONObject;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apidoc.ws.auth.model.request.GoogleTokenModel;
-import com.apidoc.ws.auth.model.response.ApiRest;
-import com.apidoc.ws.auth.model.response.UserRest;
-import com.apidoc.ws.service.UserService;
-import com.apidoc.ws.shared.dto.UserDto;
+import com.apidoc.auth.ws.auth.model.request.GoogleTokenModel;
+import com.apidoc.auth.ws.auth.model.response.ApiRest;
+import com.apidoc.auth.ws.auth.model.response.UserRest;
+import com.apidoc.auth.ws.service.UserService;
+import com.apidoc.auth.ws.shared.dto.UserDto;
 
 
 @RestController
@@ -28,7 +30,7 @@ public class LoginController {
 	UserService userService;
 	
 	@PostMapping
-	public ApiRest createUser(@RequestBody GoogleTokenModel token) throws IOException, InterruptedException {
+	public ResponseEntity<ApiRest> createUser(@RequestBody GoogleTokenModel token) throws IOException, InterruptedException {
 		
 		String t = token.getToken();
 		
@@ -53,7 +55,7 @@ public class LoginController {
 			returnValue.setStatus("error");
 			returnValue.setData("Invalid Google token");
 			
-			return returnValue;
+			return new ResponseEntity<ApiRest>(returnValue, HttpStatus.BAD_REQUEST);
 		}
 		
 //		System.out.println(resBody.getString("given_name"));
@@ -74,7 +76,7 @@ public class LoginController {
 		returnValue.setStatus("success");
 		returnValue.setData(userRest);
 		
-		return returnValue;
+		return new ResponseEntity<ApiRest>(returnValue, HttpStatus.OK);
 	}
 }
 
