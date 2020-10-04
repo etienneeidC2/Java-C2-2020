@@ -1,6 +1,6 @@
 package com.apidoc.auth.ws.auth.model.response;
 
-public class ApiRest {
+public class CallRest {
 	private String status;
 	private Object data;
 	

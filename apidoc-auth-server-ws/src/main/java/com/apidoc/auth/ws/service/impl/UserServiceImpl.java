@@ -1,11 +1,14 @@
 package com.apidoc.auth.ws.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apidoc.auth.ws.auth.model.response.UserRest;
 import com.apidoc.auth.ws.io.entity.UserEntity;
 import com.apidoc.auth.ws.io.repositories.UserRepository;
 import com.apidoc.auth.ws.security.SecurityConstants;
@@ -42,9 +45,9 @@ public class UserServiceImpl implements UserService {
 			String publicUserId = utils.generateUserId(30);
 			userEntity.setUserId(publicUserId);
 			
-			UserEntity storedUSerDetails = userRepository.save(userEntity);
+			UserEntity storedUserDetails = userRepository.save(userEntity);
 			
-			BeanUtils.copyProperties(storedUSerDetails, returnValue);
+			BeanUtils.copyProperties(storedUserDetails, returnValue);
 		}
 		
 		String token = Jwts.builder()
@@ -54,6 +57,22 @@ public class UserServiceImpl implements UserService {
 				.compact();
 		
 		returnValue.setToken(token);
+		
+		return returnValue;
+	}
+	
+	@Override
+	public List<UserDto> getAllUsers() {
+		
+		List<UserDto> returnValue = new ArrayList<>();
+				
+		List<UserEntity> allUsers= userRepository.findAll();
+				
+		for (UserEntity userEntity : allUsers) {
+			UserDto userDto = new UserDto();
+			BeanUtils.copyProperties(userEntity, userDto);
+			returnValue.add(userDto);
+		}
 		
 		return returnValue;
 	}

@@ -1,5 +1,9 @@
 package com.apidoc.auth.ws.auth.model.response;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@SuppressWarnings("deprecation")
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class UserRest {
 	private String userId;
 	private String firstName;

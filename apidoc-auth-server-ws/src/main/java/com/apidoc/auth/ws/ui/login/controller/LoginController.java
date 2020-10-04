@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apidoc.auth.ws.auth.model.request.GoogleTokenModel;
-import com.apidoc.auth.ws.auth.model.response.ApiRest;
+import com.apidoc.auth.ws.auth.model.response.CallRest;
 import com.apidoc.auth.ws.auth.model.response.UserRest;
 import com.apidoc.auth.ws.service.UserService;
 import com.apidoc.auth.ws.shared.dto.UserDto;
@@ -30,7 +30,7 @@ public class LoginController {
 	UserService userService;
 	
 	@PostMapping
-	public ResponseEntity<ApiRest> createUser(@RequestBody GoogleTokenModel token) throws IOException, InterruptedException {
+	public ResponseEntity<CallRest> createUser(@RequestBody GoogleTokenModel token) throws IOException, InterruptedException {
 		
 		String t = token.getToken();
 		
@@ -38,7 +38,7 @@ public class LoginController {
 		
 		HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create("https://oauth2.googleapis.com/tokeninfo?id_token=" + t)).build();
 		
-		ApiRest returnValue = new ApiRest();
+		CallRest returnValue = new CallRest();
 		
 		JSONObject resBody = new JSONObject();
 		
@@ -55,7 +55,7 @@ public class LoginController {
 			returnValue.setStatus("error");
 			returnValue.setData("Invalid Google token");
 			
-			return new ResponseEntity<ApiRest>(returnValue, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<CallRest>(returnValue, HttpStatus.BAD_REQUEST);
 		}
 		
 //		System.out.println(resBody.getString("given_name"));
@@ -76,7 +76,7 @@ public class LoginController {
 		returnValue.setStatus("success");
 		returnValue.setData(userRest);
 		
-		return new ResponseEntity<ApiRest>(returnValue, HttpStatus.OK);
+		return new ResponseEntity<CallRest>(returnValue, HttpStatus.OK);
 	}
 }
 
