@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		String token = Jwts.builder()
-				.setSubject(returnValue.getId())
+				.setSubject(returnValue.getUserId())
 				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_DATE))
 				.signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET)
 				.compact();
