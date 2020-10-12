@@ -33,7 +33,7 @@ class UserPage extends Component {
             <React.Fragment>
                 {!this.state.apis.length &&
                     <p style={{ color: 'black', paddingTop: '150px', alignItems: 'center', justifyContent: 'center', display: 'flex' }}> 
-                        This user hasn't added any APIs yet!!
+                        Cet utilisateur n'a pas encore ajouté d'API !!
                     </p>
                 }
                 {/* {this.state.apis.length &&
