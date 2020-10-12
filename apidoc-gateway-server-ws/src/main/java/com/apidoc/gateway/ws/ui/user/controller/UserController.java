@@ -10,8 +10,10 @@ import java.time.Duration;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apidoc.gateway.ws.model.response.CallRest;
@@ -26,6 +28,12 @@ import com.google.gson.Gson;
 @RequestMapping("users")
 public class UserController {
 
+	@CrossOrigin(
+		    allowCredentials = "true",
+		    origins = "*", 
+		    allowedHeaders = "*", 
+		    methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT}
+		)
 	@GetMapping
 	public ResponseEntity<CallRest> getAllUsers() throws IOException, InterruptedException {
 	

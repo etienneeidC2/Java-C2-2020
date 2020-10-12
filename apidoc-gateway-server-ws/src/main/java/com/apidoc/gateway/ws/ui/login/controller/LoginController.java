@@ -1,22 +1,21 @@
 package com.apidoc.gateway.ws.ui.login.controller;
 
 import java.net.http.*;
-import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apidoc.gateway.ws.model.request.GoogleTokenModel;
@@ -28,6 +27,12 @@ import com.google.gson.Gson;
 @RequestMapping("login")
 public class LoginController {
 	
+	@CrossOrigin(
+		    allowCredentials = "true",
+		    origins = "*", 
+		    allowedHeaders = "*", 
+		    methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT}
+		)
 	@PostMapping
 	public ResponseEntity<CallRest> createUser(@RequestBody GoogleTokenModel token) throws IOException, InterruptedException {
 	
