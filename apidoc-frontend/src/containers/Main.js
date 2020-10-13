@@ -36,11 +36,11 @@ class Main extends Component {
                 <Switch>
                     <Route
                         exact path='/'
-                        render={() => <AllUsers {... this.state}/>}
+                        render={() => <AllUsers {... this.state} />}
                     />
                     <Route
-                        exact path='/:username'
-                        render={() => <UserPage/>}
+                        exact path='/:userId'
+                        render={() => <UserPage />}
                     />
 
                 </Switch>

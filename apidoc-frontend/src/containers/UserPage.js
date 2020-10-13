@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Grid, Menu, Sidebar, Segment } from 'semantic-ui-react';
+import ApiCard from './ApiCard';
 
 class UserPage extends Component {
 
@@ -32,13 +34,40 @@ class UserPage extends Component {
         return (
             <React.Fragment>
                 {!this.state.apis.length &&
-                    <p style={{ color: 'black', paddingTop: '150px', alignItems: 'center', justifyContent: 'center', display: 'flex' }}> 
+                    <p style={{ color: 'black', paddingTop: '150px', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
                         Cet utilisateur n'a pas encore ajouté d'API !!
                     </p>
                 }
-                {/* {this.state.apis.length &&
-
-                } */}
+                {this.state.apis.length &&
+                    <Grid columns={3} style={{ paddingTop: '55px' }}>
+                        <Grid.Row stretched>
+                            <Grid.Column>
+                                <Sidebar style={{ top: '48px' }} as={Menu} borderless inverted vertical visible width="wide">
+                                    {this.state.apis.map((api) => {
+                                        return (
+                                            <Menu.Item key={api.id} as='a'>
+                                                {api.method + ' ' + api.name}
+                                            </Menu.Item>
+                                        )
+                                    })}
+                                </Sidebar>
+                            </Grid.Column>
+                            <Grid.Column>
+                                {this.state.apis.map((api) => {
+                                    return (
+                                        <ApiCard
+                                            name={api.name}
+                                            method={api.method}
+                                            route={api.route}
+                                            description={api.description}
+                                            userId={api.userId}
+                                        />
+                                    )
+                                })}
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                }
             </React.Fragment>
 
         );
@@ -47,3 +76,20 @@ class UserPage extends Component {
 }
 
 export default UserPage;
+
+/**
+ * <
+Grid columns={2}>
+                        <Grid.Column>
+                            <Sidebar.Pushable as={Segment}>
+
+                            <Sidebar.Pusher>
+                                <Segment basic>
+                                <Header as='h3'>Application Content</Header>
+                                <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
+                                </Segment>
+                            </Sidebar.Pusher>
+                            </Sidebar.Pushable>
+                        </Grid.Column>
+                        </Grid>
+ */
