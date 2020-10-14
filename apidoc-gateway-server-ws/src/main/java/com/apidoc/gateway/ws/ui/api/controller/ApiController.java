@@ -88,6 +88,13 @@ public class ApiController {
 		return new ResponseEntity<CallRest>(returnValue, HttpStatus.OK);
 	}
 
+	
+	@CrossOrigin(
+		    allowCredentials = "true",
+		    origins = "*", 
+		    allowedHeaders = "*", 
+		    methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT}
+		)
 	@PostMapping()
 	public ResponseEntity<CallRest> createApi(HttpServletRequest req, @RequestBody ApiModel api) throws IOException, InterruptedException {
 		
@@ -148,6 +155,13 @@ public class ApiController {
 		return new ResponseEntity<CallRest>(returnValue, HttpStatus.OK);
 	}
 
+	
+	@CrossOrigin(
+		    allowCredentials = "true",
+		    origins = "*", 
+		    allowedHeaders = "*", 
+		    methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT}
+		)
 	@PutMapping(path="/{apiId}")
 	public ResponseEntity<CallRest> editApi(HttpServletRequest req,  @PathVariable("apiId") Long apiId, @RequestBody ApiModel api) throws IOException, InterruptedException {
 		
@@ -210,7 +224,13 @@ public class ApiController {
 		
 		return new ResponseEntity<CallRest>(returnValue, HttpStatus.OK);
 	}
-//	
+
+	@CrossOrigin(
+		    allowCredentials = "true",
+		    origins = "*", 
+		    allowedHeaders = "*", 
+		    methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT}
+		)
 	@DeleteMapping(path="/{apiId}")
 	public ResponseEntity<CallRest> deleteApi(HttpServletRequest req,  @PathVariable("apiId") Long apiId) throws IOException, InterruptedException {
  
