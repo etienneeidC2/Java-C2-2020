@@ -3,21 +3,76 @@ import { Input, Form, Button } from 'semantic-ui-react';
 
 class ApiCard extends Component {
 
-    state = {
-        apiInfo:{
-            name: 'name',
-            method: 'method',
-            route: 'route',
-            description: 'description',
-            userId: 'userId'
-        },
-        editMode: false,
-        isOwner: true,
-        isLoading: false
-    };
+    constructor(){
+        super();
+
+        this.state = {
+            apiInfo:{
+                id: 'id',
+                name: 'name',
+                method: 'method',
+                route: 'route',
+                description: 'description',
+                userId: 'userId'
+            },
+            editMode: false,
+            isLoading: false
+        };
+
+        this.oldState = {};
+
+        this.onEditClick = this.onEditClick.bind(this);
+        this.onCancelClick = this.onCancelClick.bind(this);
+
+        this.onDeleteClick = this.onDeleteClick.bind(this);
+        this.onSaveClick = this.onSaveClick.bind(this);
+
+        this.onMethodChange = this.onMethodChange.bind(this);
+        this.onNameChange = this.onNameChange.bind(this);
+        this.onRouteChange = this.onRouteChange.bind(this);
+        this.ondDescriptionChange = this.ondDescriptionChange.bind(this);
+
+    }
 
     componentDidMount(){
         this.setState({apiInfo: {... this.props}});
+        
+    }
+
+    onEditClick(){
+        this.oldState = {...this.state.apiInfo};
+        this.setState({editMode: true});
+    }
+
+    onCancelClick(){
+        this.setState({apiInfo: {... this.oldState}, editMode: false});
+    }
+
+    onDeleteClick(){
+        alert(this.state.apiInfo.id);
+        this.props.onDelete(this.state.apiInfo.id);
+    }
+
+    onSaveClick(){
+        alert(this.state.apiInfo.id);
+        this.props.onEdit(this.state.apiInfo);
+        this.setState({editMode: false});
+    }
+
+    onMethodChange(e){
+        this.setState({apiInfo: {...this.state.apiInfo, method: e.target.value} });
+    }
+
+    onNameChange(e){
+        this.setState({apiInfo: {...this.state.apiInfo, name: e.target.value} });
+    }
+
+    onRouteChange(e){
+        this.setState({apiInfo: {...this.state.apiInfo, route: e.target.value} });
+    }
+
+    ondDescriptionChange(e){
+        this.setState({apiInfo: {...this.state.apiInfo, description: e.target.value} });
     }
 
     render() {
@@ -29,11 +84,11 @@ class ApiCard extends Component {
                         <a>{this.state.apiInfo.method + ' ' + this.state.apiInfo.name}</a>
                         <a>{this.state.apiInfo.route}</a>
                         <a>{this.state.apiInfo.description}</a>
-                        {this.state.isOwner &&
-                            <React.Fragment>
-                                <Button content='Edit' icon='edit' labelPosition='left'/>
-                                <Button content='Delete' icon='trash' labelPosition='left' negative/>
-                            </React.Fragment>
+                        {this.props.isOwner &&
+                            <Button.Group>
+                                <Button color='blue' content='Modifier' icon='edit' labelPosition='left' onClick={this.onEditClick}/>
+                                <Button color='red' content='Supprimer' icon='trash' labelPosition='left' onClick={this.onDeleteClick}/>
+                            </Button.Group>
                         }
                         
                     </React.Fragment>
@@ -43,24 +98,27 @@ class ApiCard extends Component {
                         <Form loading={this.state.isLoading}>
                             <Form.Field required>
                                 <label>Method</label>
-                                <Input placeholder='GET, POST, PUT, Delete, ...' />
+                                <Input placeholder='GET, POST, PUT, Delete, ...' value={this.state.apiInfo.method} onChange={this.onMethodChange}/>
                             </Form.Field>
                             <Form.Field required>
                                 <label>Name</label>
-                                <Input placeholder='Name' />
+                                <Input placeholder='Name' value={this.state.apiInfo.name} onChange={this.onNameChange}/>
                             </Form.Field>
                             <Form.Field required>
                                 <label>Route</label>
-                                <Input placeholder='Route' />
+                                <Input placeholder='Route' value={this.state.apiInfo.route} onChange={this.onRouteChange}/>
                             </Form.Field>
                             <Form.Field required>
                                 <label>Description</label>
-                                <Input placeholder='Description' />
+                                <Input placeholder='Description' value={this.state.apiInfo.description} onChange={this.ondDescriptionChange}/>
                             </Form.Field>
                         </Form>
                         <br/>
-                        {(this.state.isOwner && this.state.editMode) &&
-                           <Button content='Cancel' icon='cancel' labelPosition='left' negative/>
+                        {(this.props.isOwner && this.state.editMode) &&
+                        <Button.Group>
+                            <Button color='green' content='Enregistrer' icon='save' labelPosition='left' onClick={this.onSaveClick}/>
+                            <Button color='red' content='Annuler' icon='cancel' labelPosition='left' onClick={this.onCancelClick}/>
+                        </Button.Group>
                         }
                     </React.Fragment>
                 }
@@ -72,20 +130,3 @@ class ApiCard extends Component {
 }
 
 export default ApiCard;
-
-/**
- * <
-Grid columns={2}>
-                        <Grid.Column>
-                            <Sidebar.Pushable as={Segment}>
-
-                            <Sidebar.Pusher>
-                                <Segment basic>
-                                <Header as='h3'>Application Content</Header>
-                                <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-                                </Segment>
-                            </Sidebar.Pusher>
-                            </Sidebar.Pushable>
-                        </Grid.Column>
-                        </Grid>
- */

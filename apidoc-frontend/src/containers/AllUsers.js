@@ -6,7 +6,7 @@ class AllUsers extends Component {
     render() {
         return (
             <React.Fragment>
-                <Card.Group itemsPerRow={3} style={{paddingTop: '55px', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+                <Card.Group itemsPerRow={3} style={{ paddingTop: '55px', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
                     {this.props.users.map((user) => {
                         return (
                             <Card

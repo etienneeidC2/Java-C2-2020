@@ -5,7 +5,10 @@ import AllUsers from './AllUsers';
 import UserPage from './UserPage';
 
 class Main extends Component {
-    state = { users: [] };
+    constructor(){
+        super();
+        this.state = { users: [] };
+    }
 
     componentDidMount() {
 
