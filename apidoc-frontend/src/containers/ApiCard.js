@@ -49,12 +49,10 @@ class ApiCard extends Component {
     }
 
     onDeleteClick(){
-        alert(this.state.apiInfo.id);
         this.props.onDelete(this.state.apiInfo.id);
     }
 
     onSaveClick(){
-        alert(this.state.apiInfo.id);
         this.props.onEdit(this.state.apiInfo);
         this.setState({editMode: false});
     }

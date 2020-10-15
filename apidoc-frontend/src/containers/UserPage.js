@@ -4,8 +4,8 @@ import ApiCard from './ApiCard';
 
 class UserPage extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.initApiInfo = {
             id: 'id',
             name: 'name',
@@ -16,36 +16,11 @@ class UserPage extends Component {
         };
         this.state = {
             addMode: false,
-            isOwner: true,
+            renderAdd: true,
+            isOwner: (window.location.pathname === `/${this.props.userId}`) ? true : false,
             path: window.location.pathname,
             apiInfo: this.initApiInfo,
-            apis: [
-                // to be removed later
-                // {
-                //     id: 1,
-                //     method: 'GET',
-                //     name: 'some functionality',
-                //     route: 'http://localhost:8080/api/func',
-                //     description: 'some kind of description',
-                //     userId: 'x',
-                // },
-                // {
-                //     id: 2,
-                //     method: 'Post',
-                //     name: 'some other functionality',
-                //     route: 'http://localhost:8080/api/dunc',
-                //     description: 'some other kind of description',
-                //     userId: 'x',
-                // },
-                // {
-                //     id: 3,
-                //     method: 'PUT',
-                //     name: 'some other other functionality',
-                //     route: 'http://localhost:8080/api/punc',
-                //     description: 'some other other kind of description',
-                //     userId: 'x',
-                // }
-            ]
+            apis: []
         };
 
         this.onMethodChange = this.onMethodChange.bind(this);
@@ -81,12 +56,18 @@ class UserPage extends Component {
             .catch(err => console.log(err));
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.userId != prevProps.userId) {
+            this.setState({ isOwner: (window.location.pathname === `/${this.props.userId}`) ? true : false })
+        }
+    }
+
     onAddClick() {
-        this.setState({ addMode: true });
+        this.setState({ addMode: true, renderAdd: false });
     }
 
     onCancelClick() {
-        this.setState({ addMode: false });
+        this.setState({ addMode: false, renderAdd: true });
     }
 
     onMethodChange(e) {
@@ -111,13 +92,14 @@ class UserPage extends Component {
         myHeaders.append('Access-Control-Allow-Origin', '*');
         myHeaders.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
         myHeaders.append('Access-Control-Allow-Headers', '*');
+        myHeaders.append('Authorization', `Bearer ${this.props.userToken}`);
         myHeaders.append('Content-Type', 'application/json');
 
         const myRequest = new Request(`http://localhost:8080/api`, {
             method: 'POST',
             headers: myHeaders,
             mode: 'cors',
-            body: this.state.apiInfo
+            body: JSON.stringify(this.state.apiInfo)
         });
 
         fetch(myRequest)
@@ -138,6 +120,7 @@ class UserPage extends Component {
         myHeaders.append('Access-Control-Allow-Origin', '*');
         myHeaders.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
         myHeaders.append('Access-Control-Allow-Headers', '*');
+        myHeaders.append('Authorization', `Bearer ${this.props.userToken}`);
         myHeaders.append('Content-Type', 'application/json');
 
         const myRequest = new Request(`http://localhost:8080/api/${data.id}`, {
@@ -172,6 +155,7 @@ class UserPage extends Component {
         myHeaders.append('Access-Control-Allow-Origin', '*');
         myHeaders.append('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
         myHeaders.append('Access-Control-Allow-Headers', '*');
+        myHeaders.append('Authorization', `Bearer ${this.props.userToken}`);
 
         const myRequest = new Request(`http://localhost:8080/api/${id}`, {
             method: 'DELETE',
@@ -193,14 +177,21 @@ class UserPage extends Component {
 
     render() {
 
+        console.log('addMode', this.state.addMode)
+        console.log('apis.length', this.state.apis.length)
+        console.log('isOwner', this.state.isOwner)
+
         return (
             <React.Fragment>
-                {!this.state.apis.length &&
+                {(!this.state.apis.length && !this.state.isOwner) &&
                     <p style={{ color: 'black', paddingTop: '150px', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
                         Cet utilisateur n'a pas encore ajouté d'API !!
                     </p>
                 }
-                {this.state.apis.length &&
+                {(!this.state.apis.length && this.state.isOwner && this.state.renderAdd) &&
+                    <Button style={{ top: '48px' }} color='green' content='Ajouter Une API' icon='save' labelPosition='left' onClick={this.onAddClick} />
+                }
+                {this.state.apis.length > 0 &&
                     <Grid columns={3} style={{ paddingTop: '55px' }}>
                         <Grid.Row stretched>
                             <Grid.Column>
@@ -217,7 +208,7 @@ class UserPage extends Component {
                             <Grid.Column>
                                 {this.state.apis.map((api) => {
                                     return (
-                                        <React.Fragment>
+                                        <React.Fragment key={api.id}>
                                             <ApiCard
                                                 id={parseInt(api.id, 10)}
                                                 name={api.name}
@@ -236,37 +227,43 @@ class UserPage extends Component {
                                 {(this.state.isOwner && !this.state.addMode) &&
                                     <Button color='green' content='Ajouter Une API' icon='save' labelPosition='left' onClick={this.onAddClick} />
                                 }
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                }
+                {(this.state.isOwner && this.state.addMode) &&
+                    <Grid columns={3} style={{ paddingTop: '55px' }}>
+                        <Grid.Row stretched>
+                            <Grid.Column />
+                            <Grid.Column>
+                                <Form loading={this.state.isLoading}>
+                                    <Form.Field required>
+                                        <label>Method</label>
+                                        <Input placeholder='GET, POST, PUT, Delete, ...' onChange={this.onMethodChange} />
+                                    </Form.Field>
+                                    <Form.Field required>
+                                        <label>Name</label>
+                                        <Input placeholder='Name' onChange={this.onNameChange} />
+                                    </Form.Field>
+                                    <Form.Field required>
+                                        <label>Route</label>
+                                        <Input placeholder='Route' onChange={this.onRouteChange} />
+                                    </Form.Field>
+                                    <Form.Field required>
+                                        <label>Description</label>
+                                        <Input placeholder='Description' onChange={this.ondDescriptionChange} />
+                                    </Form.Field>
+                                </Form>
+                                <br />
                                 {(this.state.isOwner && this.state.addMode) &&
-                                    <React.Fragment>
-                                        <Form loading={this.state.isLoading}>
-                                            <Form.Field required>
-                                                <label>Method</label>
-                                                <Input placeholder='GET, POST, PUT, Delete, ...' onChange={this.onMethodChange} />
-                                            </Form.Field>
-                                            <Form.Field required>
-                                                <label>Name</label>
-                                                <Input placeholder='Name' onChange={this.onNameChange} />
-                                            </Form.Field>
-                                            <Form.Field required>
-                                                <label>Route</label>
-                                                <Input placeholder='Route' onChange={this.onRouteChange} />
-                                            </Form.Field>
-                                            <Form.Field required>
-                                                <label>Description</label>
-                                                <Input placeholder='Description' onChange={this.ondDescriptionChange} />
-                                            </Form.Field>
-                                        </Form>
-                                        <br />
-                                        {(this.state.isOwner && this.state.addMode) &&
-                                            <Button.Group>
-                                                <Button color='green' content='Ajouter' icon='save' labelPosition='left' onClick={this.onAdd} />
-                                                <Button color='red' content='Annuler' icon='cancel' labelPosition='left' onClick={this.onCancelClick} />
-                                            </Button.Group>
-                                        }
-                                    </React.Fragment>
+                                    <Button.Group>
+                                        <Button color='green' content='Ajouter' icon='save' labelPosition='left' onClick={this.onAdd} />
+                                        <Button color='red' content='Annuler' icon='cancel' labelPosition='left' onClick={this.onCancelClick} />
+                                    </Button.Group>
                                 }
                             </Grid.Column>
                         </Grid.Row>
+
                     </Grid>
                 }
             </React.Fragment>
