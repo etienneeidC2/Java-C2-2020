@@ -1,7 +1,7 @@
 # Java-C2-2020
 Projet pour Java C2 2020
 
-L’objectif principal est de créer une plate-forme qui aidera tous les autres groupes àfaire de bonnes documentations de leurs apis développées.
+L’objectif principal est de créer une plate-forme qui aidera tous les autres groupes à faire de bonnes documentations de leurs APIs développées.
 ___
 
 Pour lancer les serveurs backend:
