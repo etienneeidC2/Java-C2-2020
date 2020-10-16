@@ -4,26 +4,53 @@ Projet pour Java C2 2020
 L’objectifprincipal est de créer une plate-forme qui aidera tous les autres groupes àfaire de bonnes documentations de leurs apis développées.
 
 
-To launch the backend servers:
+Pour lancer les serveurs backend:
 
-1 - JDK 11 must be installed
+1 - JDK 11 doit être installé
 
-2 - Start the `apidoc-gateway-server-ws` project
+2 - Le serveur MySql doit être installé et en cours d'exécution
 
-3 - Start the `apidoc-auth-server-ws` project
+3 - Démarrez le projet `apidoc-gateway-server-ws`
 
-4 - Start the `apidoc-action-server-ws` project
+4 - Démarrez le projet `apidoc-auth-server-ws`
 
-These services will be using the following ports respectively, 8080, 8081, 8082
+5 - Démarrez le projet `apidoc-action-server-ws`
 
-To launch the frontend application:
+Ces services utiliseront respectivement les ports suivants, 8080, 8081, 8082
 
-1 - The latest NodeJS ad npm must be installed
 
-2 - Open the `apidoc-frontend` directory in a terminal and run `npm install`
+La base de données se compose de 2 tables:
 
-3 - To be able to authenticate with google you must export an environment variable using the following command `export GOOGLE_CLIENT_ID=< your google app client id>`
+1- la table `users`:
 
-4 - Run `npm run start`
+| Colonnes      | Type          | Description  |
+| ------------- |:-------------:|:------------:|
+| id     | int        |ID de utilisateur       |
+| userId     | varchar        | ID généré aléatoirement de l'utilisateur       |
+| firstName     | varchar        |Prénom de l'utilisateur       |
+| lastName     | varchar        |Nom de famille de l'utilisateur       |
+| email     | varchar        |email de l'utilisateur       |
 
-The application will be running on port 3000
+2 - la table `apis`:
+
+| Colonnes      | Type          | Description  |
+| ------------- |:-------------:|:------------:|
+| id     | int        |ID de l'api       |
+| userId     | varchar        | ID généré aléatoirement du propriétaire de l'API       |
+| name     | varchar        |nom de l'API       |
+| method     | varchar        |méthode de l'API       |
+| route     | varchar        |route de l'API       |
+| description     | varchar        |description de l'API       |
+
+
+Pour lancer l'application frontend:
+
+1 - Les dernières versions de `NodeJS` et `npm` doivent être installées
+
+2 - Ouvrez le répertoire `apidoc-frontend` dans un terminal et exécutez `npm install`
+
+3 - Pour pouvoir vous authentifier avec google, vous devez exporter une variable d'environnement à l'aide de la commande suivante `export GOOGLE_CLIENT_ID = <your google app client id>`
+
+4 - Exécutez `npm run start`
+
+L'application fonctionnera sur le port 3000
