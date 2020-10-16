@@ -41,7 +41,7 @@ class Main extends Component {
         try {
             window.gapi.load('auth2', () => {
                 window.gapi.auth2.init({
-                    client_id: '637286620526-dtk2eugaq7ndu8k7kcigogpq609r6fcg.apps.googleusercontent.com'
+                    client_id: process.env.GOOGLE_CLIENT_ID
                 }).then(() => {
                     window.gapi.signin2.render(
                         'google-sign-in-button',
