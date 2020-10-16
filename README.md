@@ -2,7 +2,7 @@
 Projet pour Java C2 2020
 
 L’objectifprincipal est de créer une plate-forme qui aidera tous les autres groupes àfaire de bonnes documentations de leurs apis développées.
-
+___
 
 Pour lancer les serveurs backend:
 
@@ -18,7 +18,7 @@ Pour lancer les serveurs backend:
 
 Ces services utiliseront respectivement les ports suivants, 8080, 8081, 8082
 
-
+___
 La base de données se compose de 2 tables:
 
 1- la table `users`:
@@ -42,7 +42,7 @@ La base de données se compose de 2 tables:
 | route     | varchar        |route de l'API       |
 | description     | varchar        |description de l'API       |
 
-
+___
 Pour lancer l'application frontend:
 
 1 - Les dernières versions de `NodeJS` et `npm` doivent être installées
