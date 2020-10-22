@@ -28,7 +28,7 @@ public class ApiEntity implements Serializable{
 	@Column(nullable = false)
 	private String route;
 	
-	@Column(nullable = false)
+	@Column(columnDefinition="TEXT")
 	private String description;
 
 	public long getId() {
