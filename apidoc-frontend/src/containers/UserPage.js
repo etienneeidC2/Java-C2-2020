@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Menu, Sidebar, Form, Input, Button } from 'semantic-ui-react';
+import { Grid, Menu, Sidebar, Form, Input, Button, TextArea } from 'semantic-ui-react';
 import ApiCard from './ApiCard';
 
 class UserPage extends Component {
@@ -251,7 +251,7 @@ class UserPage extends Component {
                                     </Form.Field>
                                     <Form.Field required>
                                         <label>Description</label>
-                                        <Input placeholder='Description' onChange={this.ondDescriptionChange} />
+                                        <TextArea placeholder='Description' onChange={this.ondDescriptionChange} />
                                     </Form.Field>
                                 </Form>
                                 <br />
