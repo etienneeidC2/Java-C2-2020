@@ -7,12 +7,12 @@ class UserPage extends Component {
     constructor(props) {
         super(props);
         this.initApiInfo = {
-            id: 'id',
-            name: 'name',
-            method: 'method',
-            route: 'route',
-            description: 'description',
-            userId: 'userId'
+            id: '',
+            name: '',
+            method: '',
+            route: '',
+            description: '',
+            userId: ''
         };
         this.state = {
             addMode: false,

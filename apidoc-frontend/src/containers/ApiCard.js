@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Form, Button } from 'semantic-ui-react';
+import { Item, Input, Form, Button, TextArea } from 'semantic-ui-react';
 
 class ApiCard extends Component {
 
@@ -8,12 +8,12 @@ class ApiCard extends Component {
 
         this.state = {
             apiInfo:{
-                id: 'id',
-                name: 'name',
-                method: 'method',
-                route: 'route',
-                description: 'description',
-                userId: 'userId'
+                id: '',
+                name: '',
+                method: '',
+                route: '',
+                description: '',
+                userId: ''
             },
             editMode: false,
             isLoading: false
@@ -78,10 +78,17 @@ class ApiCard extends Component {
         return (
             <React.Fragment>
                {!this.state.editMode &&
+
                     <React.Fragment>
-                        <a>{this.state.apiInfo.method + ' ' + this.state.apiInfo.name}</a>
-                        <a>{this.state.apiInfo.route}</a>
-                        <a>{this.state.apiInfo.description}</a>
+                        <Item>
+                            <Item.Content>
+                                <Item.Header as='a'>{this.state.apiInfo.method + ' ' + this.state.apiInfo.name}</Item.Header>
+                                <Item.Meta>{this.state.apiInfo.route}</Item.Meta>
+                                <Item.Description>
+                                {this.state.apiInfo.description}
+                                </Item.Description>
+                            </Item.Content>
+                        </Item>
                         {this.props.isOwner &&
                             <Button.Group>
                                 <Button color='blue' content='Modifier' icon='edit' labelPosition='left' onClick={this.onEditClick}/>
@@ -108,7 +115,7 @@ class ApiCard extends Component {
                             </Form.Field>
                             <Form.Field required>
                                 <label>Description</label>
-                                <Input placeholder='Description' value={this.state.apiInfo.description} onChange={this.ondDescriptionChange}/>
+                                <TextArea placeholder='Description' value={this.state.apiInfo.description} onChange={this.ondDescriptionChange}/>
                             </Form.Field>
                         </Form>
                         <br/>
