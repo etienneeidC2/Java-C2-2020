@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apidoc.gateway.ws.model.request.ApiModel;
+import com.apidoc.gateway.ws.model.request.CreateApiModel;
 import com.apidoc.gateway.ws.model.response.CallRest;
 import com.apidoc.gateway.ws.security.SecurityConstants;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -96,7 +97,7 @@ public class ApiController {
 		    methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT}
 		)
 	@PostMapping()
-	public ResponseEntity<CallRest> createApi(HttpServletRequest req, @RequestBody ApiModel api) throws IOException, InterruptedException {
+	public ResponseEntity<CallRest> createApi(HttpServletRequest req, @Valid @RequestBody CreateApiModel api) throws IOException, InterruptedException {
 		
 		CallRest returnValue = new CallRest();
 		
@@ -163,7 +164,7 @@ public class ApiController {
 		    methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT}
 		)
 	@PutMapping(path="/{apiId}")
-	public ResponseEntity<CallRest> editApi(HttpServletRequest req,  @PathVariable("apiId") Long apiId, @RequestBody ApiModel api) throws IOException, InterruptedException {
+	public ResponseEntity<CallRest> editApi(HttpServletRequest req,  @PathVariable("apiId") Long apiId, @Valid @RequestBody CreateApiModel api) throws IOException, InterruptedException {
 		
 		CallRest returnValue = new CallRest();
 		

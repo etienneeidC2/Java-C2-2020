@@ -7,6 +7,8 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.json.JSONObject;
 
 import org.springframework.http.HttpStatus;
@@ -34,7 +36,7 @@ public class LoginController {
 		    methods = {RequestMethod.GET,RequestMethod.POST,RequestMethod.DELETE,RequestMethod.PUT}
 		)
 	@PostMapping
-	public ResponseEntity<CallRest> createUser(@RequestBody GoogleTokenModel token) throws IOException, InterruptedException {
+	public ResponseEntity<CallRest> createUser(@Valid @RequestBody GoogleTokenModel token) throws IOException, InterruptedException {
 	
 		HttpClient httpClient = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(Duration.ofSeconds(10)).build();
 		
