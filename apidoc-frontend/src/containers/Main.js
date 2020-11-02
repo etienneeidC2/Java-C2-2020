@@ -41,7 +41,7 @@ class Main extends Component {
         try {
             window.gapi.load('auth2', () => {
                 window.gapi.auth2.init({
-                    client_id: process.env.GOOGLE_CLIENT_ID
+                    client_id: `${process.env.REACT_APP_GOOGLE_CLIENT_ID}`
                 }).then(() => {
                     window.gapi.signin2.render(
                         'google-sign-in-button',
@@ -96,7 +96,7 @@ class Main extends Component {
             <React.Fragment>
                 <Menu inverted size='huge' borderless fixed='top'>
                     <GoogleLogin
-                        clientId="637286620526-dtk2eugaq7ndu8k7kcigogpq609r6fcg.apps.googleusercontent.com"
+                        clientId={`${process.env.REACT_APP_GOOGLE_CLIENT_ID}`}
                         buttonText="Continue with google"
                         onSuccess={this.onSuccess}
                         onFailure={this.onError}

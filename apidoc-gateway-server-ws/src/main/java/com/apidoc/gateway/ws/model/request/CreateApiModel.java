@@ -1,11 +1,20 @@
 package com.apidoc.gateway.ws.model.request;
 
-public class ApiModel {
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+public class CreateApiModel {
 	
 	private String id;
 	private String userId;
+	@NotNull(message="The name is required, yet not provided")
+	@Size(min=1, message="The name is required, yet not provided")
 	private String name;
+	@NotNull(message="The method is required, yet not provided")
+	@Size(min=1, message="The method is required, yet not provided")
 	private String method;
+	@NotNull(message="The route is required, yet not provided")
+	@Size(min=1, message="The route is required, yet not provided")
 	private String route;
 	private String description;
 	
